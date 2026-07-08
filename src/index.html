@@ -72,12 +72,6 @@
         return;
       }
 
-      if (!apiBaseUrl && !isLocalHost) {
-        fileStatus.textContent = "Upload failed: backend URL is not configured for this deployed site.";
-        fileStatus.classList.remove("selected");
-        return;
-      }
-
       const formData = new FormData();
       formData.append("file", selectedFile);
 
