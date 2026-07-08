@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel Upload</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="page">
+    <section class="upload-card">
+      <h1>Upload Excel File</h1>
+      <p>Select one Excel file to process.</p>
+
+      <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file" class="upload-box">
+          <div class="upload-icon">📄</div>
+          <span class="upload-title" id="upload-title">Choose Excel file</span>
+          <span class="upload-hint">Only .xlsx or .xls files are accepted</span>
+        </label>
+
+        <input 
+          type="file" 
+          id="file" 
+          name="file" 
+          accept=".xlsx,.xls" 
+          required
+        />
+
+        <p class="file-status" id="file-status" aria-live="polite">
+          No file selected yet.
+        </p>
+
+        <button type="submit">Upload File</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const fileInput = document.getElementById("file");
+    const uploadTitle = document.getElementById("upload-title");
+    const fileStatus = document.getElementById("file-status");
+
+    fileInput.addEventListener("change", () => {
+      const selectedFile = fileInput.files[0];
+
+      if (!selectedFile) {
+        uploadTitle.textContent = "Choose Excel file";
+        fileStatus.textContent = "No file selected yet.";
+        fileStatus.classList.remove("selected");
+        return;
+      }
+
+      uploadTitle.textContent = selectedFile.name;
+      fileStatus.textContent = `Selected: ${selectedFile.name}`;
+      fileStatus.classList.add("selected");
+    });
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 *
 !.gitignore
 !src/
-!src/main.html
+!src/index.html
 !src/style.css
 .env
