@@ -1,9 +1,0 @@
-duckdb
-fastapi
-langchain-google-genai
-openpyxl
-pandas
-python-dotenv
-python-multipart
-rapidfuzz
-uvicorn[standard]
