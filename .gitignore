@@ -1,10 +1,10 @@
 *
 !.gitignore
 !DEPLOY.md
+!backend-requirements.txt
 !Procfile
 !netlify.toml
 !render.yaml
-!requirements.txt
 !runtime.txt
 !setup.py
 !src/

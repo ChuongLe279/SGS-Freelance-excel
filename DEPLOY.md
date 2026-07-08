@@ -11,6 +11,12 @@ Netlify static hosting does not run the FastAPI upload endpoint. Deploy the back
 uvicorn src.main:app --host 0.0.0.0 --port $PORT
 ```
 
+Install backend dependencies with:
+
+```bash
+pip install -r backend-requirements.txt
+```
+
 After the backend is deployed, edit `src/config.js`:
 
 ```js
