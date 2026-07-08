@@ -45,6 +45,7 @@
     const submitButton = document.getElementById("submit-button");
 
     const apiBaseUrl = (window.APP_CONFIG?.apiBaseUrl || "").replace(/\/$/, "");
+    const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
     fileInput.addEventListener("change", () => {
       const selectedFile = fileInput.files[0];
@@ -67,6 +68,12 @@
       const selectedFile = fileInput.files[0];
       if (!selectedFile) {
         fileStatus.textContent = "Please choose an Excel file first.";
+        fileStatus.classList.remove("selected");
+        return;
+      }
+
+      if (!apiBaseUrl && !isLocalHost) {
+        fileStatus.textContent = "Upload failed: backend URL is not configured for this deployed site.";
         fileStatus.classList.remove("selected");
         return;
       }
@@ -105,7 +112,7 @@
         uploadForm.reset();
         uploadTitle.textContent = "Choose Excel file";
       } catch (error) {
-        fileStatus.textContent = "Upload failed. Please check that the backend is deployed and try again.";
+        fileStatus.textContent = `Upload failed: ${error.message}. Please check the backend URL and try again.`;
         fileStatus.classList.remove("selected");
       } finally {
         submitButton.disabled = false;
