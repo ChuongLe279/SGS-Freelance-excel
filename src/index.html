@@ -87,7 +87,16 @@
         });
 
         if (!response.ok) {
-          throw new Error(`Upload failed with status ${response.status}`);
+          let message = `Upload failed with status ${response.status}`;
+          try {
+            const errorBody = await response.json();
+            if (errorBody.detail) {
+              message = errorBody.detail;
+            }
+          } catch (_) {
+            // Keep the HTTP status message when the response is not JSON.
+          }
+          throw new Error(message);
         }
 
         const blob = await response.blob();

@@ -3,7 +3,7 @@ import os
 import shutil
 import uuid
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -98,9 +98,9 @@ async def upload_excel(file: UploadFile = File(...)):
 
         # Process Excel file
         process_excel(uploaded_path, output_path)
-    except Exception:
+    except Exception as exc:
         cleanup_files(uploaded_path, output_path)
-        raise
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
     finally:
         await file.close()
 

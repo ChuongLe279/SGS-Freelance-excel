@@ -411,8 +411,11 @@ def process_excel(input_path, output_path):
                 ws.cell(row=row_idx, column=normalized_excel_col).fill = red_fill # type: ignore
 
     for col_idx, col_name in enumerate(output_df.columns, start=1):
+        value_lengths = output_df[col_name].map(
+            lambda value: len("" if pd.isna(value) else str(value))
+        )
         max_len = max(
-            output_df[col_name].astype(str).map(len).max(),
+            value_lengths.max(),
             len(str(col_name)),
         )
         col_letter = get_column_letter(col_idx)
