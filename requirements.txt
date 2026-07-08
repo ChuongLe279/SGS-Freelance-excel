@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pandas
+openpyxl
+xlrd
+duckdb
+rapidfuzz
+python-dotenv
+langchain-google-genai
