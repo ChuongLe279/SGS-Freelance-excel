@@ -2,10 +2,8 @@
 !.gitignore
 !DEPLOY.md
 !backend-requirements.txt
-!Procfile
 !netlify.toml
 !render.yaml
-!runtime.txt
 !setup.py
 !src/
 !src/config.js
