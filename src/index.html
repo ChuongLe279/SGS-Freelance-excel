@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Excel Upload</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="page">
@@ -12,7 +12,7 @@
       <h1>Upload Excel File</h1>
       <p>Select one Excel file to process.</p>
 
-      <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+      <form class="upload-form" id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
         <label for="file" class="upload-box">
           <div class="upload-icon">📄</div>
           <span class="upload-title" id="upload-title">Choose Excel file</span>
@@ -31,15 +31,20 @@
           No file selected yet.
         </p>
 
-        <button type="submit">Upload File</button>
+        <button type="submit" id="submit-button">Upload File</button>
       </form>
     </section>
   </main>
 
+  <script src="config.js"></script>
   <script>
+    const uploadForm = document.getElementById("upload-form");
     const fileInput = document.getElementById("file");
     const uploadTitle = document.getElementById("upload-title");
     const fileStatus = document.getElementById("file-status");
+    const submitButton = document.getElementById("submit-button");
+
+    const apiBaseUrl = (window.APP_CONFIG?.apiBaseUrl || "").replace(/\/$/, "");
 
     fileInput.addEventListener("change", () => {
       const selectedFile = fileInput.files[0];
@@ -54,6 +59,58 @@
       uploadTitle.textContent = selectedFile.name;
       fileStatus.textContent = `Selected: ${selectedFile.name}`;
       fileStatus.classList.add("selected");
+    });
+
+    uploadForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const selectedFile = fileInput.files[0];
+      if (!selectedFile) {
+        fileStatus.textContent = "Please choose an Excel file first.";
+        fileStatus.classList.remove("selected");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Processing...";
+      fileStatus.textContent = "Uploading and processing file...";
+      fileStatus.classList.remove("selected");
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/upload`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Upload failed with status ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = URL.createObjectURL(blob);
+        const downloadLink = document.createElement("a");
+
+        downloadLink.href = downloadUrl;
+        downloadLink.download = "sap_that_nghiep.xlsx";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+        URL.revokeObjectURL(downloadUrl);
+
+        fileStatus.textContent = "Done. Your Excel file has downloaded.";
+        fileStatus.classList.add("selected");
+        uploadForm.reset();
+        uploadTitle.textContent = "Choose Excel file";
+      } catch (error) {
+        fileStatus.textContent = "Upload failed. Please check that the backend is deployed and try again.";
+        fileStatus.classList.remove("selected");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Upload File";
+      }
     });
   </script>
 </body>
