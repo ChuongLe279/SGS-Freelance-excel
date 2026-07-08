@@ -1,17 +1,3 @@
 *
 !.gitignore
-!DEPLOY.md
-!backend-requirements.txt
-!netlify.toml
-!render.yaml
-!setup.py
-!src/
-!src/config.js
-!src/index.html
-!src/main.py
-!src/processing.py
-!src/style.css
-src/uploads/
-src/outputs/
-src/__pycache__/
 .env

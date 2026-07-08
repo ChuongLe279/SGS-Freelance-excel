@@ -53,6 +53,16 @@ def home():
     return FileResponse(BASE_DIR / "index.html")
 
 
+@app.get("/style.css", include_in_schema=False)
+def stylesheet():
+    return FileResponse(BASE_DIR / "style.css", media_type="text/css")
+
+
+@app.get("/config.js", include_in_schema=False)
+def config_script():
+    return FileResponse(BASE_DIR / "config.js", media_type="application/javascript")
+
+
 @app.post("/upload")
 async def upload_excel(file: UploadFile = File(...)):
     allowed_extensions = [".xlsx", ".xls"]
